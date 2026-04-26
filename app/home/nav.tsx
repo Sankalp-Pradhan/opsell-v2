@@ -50,19 +50,19 @@ export function Nav() {
 
       {/* CTA */}
       <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-        <button
+        {/* <button
           style={{ fontFamily: "var(--font-display)", fontSize: 14, fontWeight: 600, color: "#2E3238", background: "none", border: "none", cursor: "pointer", padding: "8px 16px", borderRadius: 8 }}
           onMouseEnter={e => (e.currentTarget.style.background = "#F0F1F3")}
           onMouseLeave={e => (e.currentTarget.style.background = "none")}
         >
           Log in
-        </button>
+        </button> */}
         <button
           style={{ fontFamily: "var(--font-display)", fontSize: 14, fontWeight: 600, color: "#fff", background: "#5046E5", border: "none", cursor: "pointer", padding: "9px 20px", borderRadius: 8 }}
           onMouseEnter={e => (e.currentTarget.style.background = "#3B32C4")}
           onMouseLeave={e => (e.currentTarget.style.background = "#5046E5")}
         >
-          Book a Demo
+          Talk to the founder
         </button>
       </div>
     </nav>
