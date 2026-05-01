@@ -26,7 +26,6 @@ export default function OpsellHomePage() {
       />
 
       <div style={{ fontFamily: "var(--font-body)", color: "#0F1114", background: "#fff", overflowX: "hidden" }}>
-        <Nav />
         <Hero />
         <ProblemSection />
         <GrowthSection />
@@ -34,7 +33,6 @@ export default function OpsellHomePage() {
         <RevenueLeakQuiz />
         <FAQ />
         <CtaSection/>
-        <Footer />
       </div>
     </>
   );
