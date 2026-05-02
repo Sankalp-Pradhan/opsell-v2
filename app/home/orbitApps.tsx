@@ -6,8 +6,9 @@ import { OrbitingCircles } from './orbiting-circles';
 
 function radiiForWidth(width: number) {
     return {
-        inner: width < 640 ? 90 : width < 1024 ? 120 : 150,
-        outer: width < 640 ? 140 : width < 1024 ? 180 : 230,
+        inner: width < 640 ? 62 : width < 1024 ? 120 : 150,
+        outer: width < 640 ? 108 : width < 1024 ? 180 : 230,
+        iconSize: width < 640 ? 36 : 56,
     };
 }
 
@@ -21,13 +22,13 @@ const OrbitApps = () => {
         return () => window.removeEventListener("resize", update);
     }, []);
 
-    const { inner, outer } = useMemo(
+    const { inner, outer, iconSize } = useMemo(
         () => radiiForWidth(width ?? 1024),
         [width]
     );
 
     return (
-        <div className="relative flex h-[320px] sm:h-[420px] lg:h-[500px] w-full items-center justify-center overflow-hidden">
+        <div className="relative flex h-[260px] sm:h-[420px] lg:h-[500px] w-full items-center justify-center overflow-hidden">
             {/* Grid background */}
             <div
                 aria-hidden
@@ -46,117 +47,107 @@ const OrbitApps = () => {
             />
 
             {/* Center text */}
-            <span className="pointer-events-none z-10 whitespace-pre-wrap  bg-[#7B73FF] bg-clip-text text-center text-3xl sm:text-4xl lg:text-5xl font-semibold leading-none text-transparent">
+            <span className="pointer-events-none z-10 whitespace-pre-wrap bg-[#7B73FF] bg-clip-text text-center text-2xl sm:text-4xl lg:text-5xl font-semibold leading-none text-transparent">
                 Opsell
             </span>
 
             {/* Inner orbit */}
-            <OrbitingCircles
-                radius={inner}
-                duration={20}
-                delay={10}
-            >
-                <div className="flex h-14 w-14 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
-                <Image
+            <OrbitingCircles radius={inner} duration={20} delay={10} iconSize={iconSize}>
+                <div className="flex h-10 w-10 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
+                    <Image
                         src="/assets/amazon.png"
-                        alt="Flipkart"
+                        alt="Amazon"
                         width={84}
                         height={84}
-                        className="h-8 w-8 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
+                        className="h-6 w-6 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
                     />
                 </div>
 
-                <div className="flex h-14 w-14 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
+                <div className="flex h-10 w-10 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
                     <Image
                         src="/assets/flipkart.png"
                         alt="Flipkart"
                         width={84}
                         height={84}
-                        className="h-8 w-8 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
+                        className="h-6 w-6 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
                     />
                 </div>
 
-                <div className="flex h-14 w-14 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
+                <div className="flex h-10 w-10 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
                     <Image
                         src="/assets/shopify.png"
-                        alt="Flipkart"
+                        alt="Shopify"
                         width={84}
                         height={84}
-                        className="h-8 w-8 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
+                        className="h-6 w-6 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
                     />
                 </div>
             </OrbitingCircles>
 
             {/* Outer orbit */}
-            <OrbitingCircles
-                radius={outer}
-                duration={20}
-                delay={10}
-                reverse
-            >
-                <div className="flex h-14 w-14 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
+            <OrbitingCircles radius={outer} duration={20} delay={10} reverse iconSize={iconSize}>
+                <div className="flex h-10 w-10 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
                     <Image
                         src="/assets/ajio.png"
                         alt="Ajio"
                         width={84}
                         height={84}
-                        className="h-8 w-8 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
+                        className="h-6 w-6 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
                     />
                 </div>
 
-                <div className="flex h-14 w-14 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
+                <div className="flex h-10 w-10 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
                     <Image
                         src="/assets/zepto.png"
                         alt="Zepto"
                         width={100}
                         height={100}
-                        className="h-8 w-8 sm:h-12 sm:w-12 lg:h-24 lg:w-24 object-contain"
+                        className="h-6 w-6 sm:h-12 sm:w-12 lg:h-24 lg:w-24 object-contain"
                     />
                 </div>
 
-                <div className="flex h-14 w-14 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
+                <div className="flex h-10 w-10 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
                     <Image
                         src="/assets/blinkit.png"
                         alt="Blinkit"
                         width={100}
                         height={100}
-                        className="h-8 w-8 sm:h-12 sm:w-12 lg:h-24 lg:w-24 object-contain"
+                        className="h-6 w-6 sm:h-12 sm:w-12 lg:h-24 lg:w-24 object-contain"
                     />
                 </div>
 
-                <div className="flex h-14 w-14 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
+                <div className="flex h-10 w-10 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
                     <Image
                         src="/assets/meesho1.png"
                         alt="Meesho"
                         width={88}
                         height={88}
-                        className="h-8 w-8 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
+                        className="h-6 w-6 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
                     />
                 </div>
 
-                <div className="flex h-14 w-14 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
+                <div className="flex h-10 w-10 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
                     <Image
                         src="/assets/myntra.png"
                         alt="Myntra"
                         width={88}
                         height={88}
-                        className="h-8 w-8 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
+                        className="h-6 w-6 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
                     />
                 </div>
 
-                <div className="flex h-14 w-14 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
+                <div className="flex h-10 w-10 sm:h-20 sm:w-20 lg:h-28 lg:w-28 items-center justify-center rounded-2xl">
                     <Image
                         src="/assets/jiomart.png"
-                        alt="Myntra"
+                        alt="JioMart"
                         width={88}
                         height={88}
-                        className="h-8 w-8 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
+                        className="h-6 w-6 sm:h-12 sm:w-12 lg:h-20 lg:w-20 object-contain"
                     />
                 </div>
             </OrbitingCircles>
         </div>
     );
 };
-
 
 export default OrbitApps;
