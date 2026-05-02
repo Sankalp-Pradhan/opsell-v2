@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useInView } from "./use-view";
 
 // ─── CTA Section ──────────────────────────────────────────────────────────────
@@ -24,13 +25,15 @@ export function CtaSection() {
         </p>
 
         <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-          <button
-            style={{ fontFamily: "var(--font-display)", fontSize: 15, fontWeight: 600, color: "#fff", background: "#5046E5", border: "none", cursor: "pointer", padding: "13px 32px", borderRadius: 10, boxShadow: "0 8px 24px rgba(80,70,229,0.5)", transition: "transform 0.15s" }}
-            onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-2px)")}
-            onMouseLeave={e => (e.currentTarget.style.transform = "")}
-          >
-            Book a Demo
-          </button>
+          <Link href="https://opsell.neetocal.com/meeting-with-shaurya-gupta">
+            <button
+              style={{ fontFamily: "var(--font-display)", fontSize: 15, fontWeight: 600, color: "#fff", background: "#5046E5", border: "none", cursor: "pointer", padding: "13px 32px", borderRadius: 10, boxShadow: "0 8px 24px rgba(80,70,229,0.5)", transition: "transform 0.15s" }}
+              onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-2px)")}
+              onMouseLeave={e => (e.currentTarget.style.transform = "")}
+            >
+              Book a Demo
+            </button>
+          </Link> 
           <button
             style={{ fontFamily: "var(--font-display)", fontSize: 15, fontWeight: 600, color: "rgba(255,255,255,0.75)", background: "none", border: "1.5px solid rgba(255,255,255,0.2)", cursor: "pointer", padding: "13px 32px", borderRadius: 10, transition: "border-color 0.15s" }}
             onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)")}

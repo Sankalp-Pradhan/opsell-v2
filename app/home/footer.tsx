@@ -1,30 +1,48 @@
 "use client";
 
+import Link from "next/link";
+
+// ─── Config ───────────────────────────────────────────────────────────────────
+
+const NAV_LINKS = [
+  { label: "Privacy",  href: "#" },
+  { label: "Terms",    href: "#" },
+  { label: "Security", href: "#" },
+  { label: "Contact",  href: "https://opsell.neetocal.com/meeting-with-shaurya-gupta" },
+];
+
 // ─── Footer ───────────────────────────────────────────────────────────────────
 
 export function Footer() {
   return (
-    <footer style={{ background: "#0F1114", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "24px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <div style={{ display: "flex", alignItems: "baseline", gap: 1 }}>
-        <span style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 800, color: "#fff", letterSpacing: "-0.03em" }}>opsell</span>
-        <span style={{ fontFamily: "var(--font-display)", fontSize: 16, fontWeight: 800, color: "#5046E5" }}>.</span>
+    <footer className="flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] bg-n-900 px-6 py-6 sm:flex-row sm:px-10">
+
+      {/* Wordmark */}
+      <div className="flex items-baseline gap-px">
+        <span className="font-display text-base font-extrabold tracking-[-0.03em] text-white">
+          opsell
+        </span>
+        <span className="font-display text-base font-extrabold text-brand">.</span>
       </div>
 
-      <span style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "rgba(255,255,255,0.3)" }}>© 2026 Opsell AI. All rights reserved.</span>
+      {/* Copyright */}
+      <span className="font-body text-ds-caption text-white/30">
+        © 2026 Opsell AI. All rights reserved.
+      </span>
 
-      <div style={{ display: "flex", gap: 24 }}>
-        {["Privacy", "Terms", "Security", "Contact"].map(l => (
-          <a
-            key={l}
-            href="#"
-            style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "rgba(255,255,255,0.35)", textDecoration: "none" }}
-            onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
-            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.35)")}
+      {/* Nav links */}
+      <nav className="flex flex-wrap items-center justify-center gap-5 sm:gap-6">
+        {NAV_LINKS.map(({ label, href }) => (
+          <Link
+            key={label}
+            href={href}
+            className="font-body text-ds-caption text-white/35 transition-colors duration-200 hover:text-white/70"
           >
-            {l}
-          </a>
+            {label}
+          </Link>
         ))}
-      </div>
+      </nav>
+
     </footer>
   );
 }

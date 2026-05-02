@@ -30,7 +30,6 @@ const config: Config = {
           400: "#8C919A",
           300: "#B0B4BC",
           200: "#D1D4D9",
-          // ✅ renamed from 150 — use n-border instead
           border: "#E2E4E8",
           100: "#F0F1F3",
           50:  "#F8F9FA",
@@ -50,7 +49,6 @@ const config: Config = {
       },
 
       fontFamily: {
-        // ✅ Reference CSS variables injected by next/font
         display: ["var(--font-display)", "Plus Jakarta Sans", "sans-serif"],
         body:    ["var(--font-body)",    "DM Sans",           "sans-serif"],
         mono:    ["var(--font-mono)",    "JetBrains Mono",    "monospace"],
@@ -80,6 +78,7 @@ const config: Config = {
         "elev-2": "0 2px 8px rgba(15,17,20,0.08), 0 1px 2px rgba(15,17,20,0.04)",
         "elev-3": "0 8px 24px rgba(15,17,20,0.10), 0 2px 6px rgba(15,17,20,0.06)",
       },
+      
 
       keyframes: {
         aiPulse: {
@@ -98,6 +97,11 @@ const config: Config = {
           "0%":   { left: "-60%" },
           "100%": { left: "160%" },
         },
+        // ✅ Added marquee keyframe
+        marquee: {
+          "0%":   { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
 
       animation: {
@@ -105,6 +109,8 @@ const config: Config = {
         "ai-shimmer": "aiShimmer 2s ease infinite",
         "fade-up":    "fadeUp 0.6s ease both",
         "pill-beam":  "pillBeam 3s ease infinite",
+      "pulse-glow": "pulse-glow 5s ease-in-out infinite",
+        "marquee":    "marquee 25s linear infinite",
       },
 
       backgroundImage: {
@@ -114,6 +120,7 @@ const config: Config = {
       backgroundSize: {
         "200%": "200% 100%",
       },
+      
     },
   },
   plugins: [],

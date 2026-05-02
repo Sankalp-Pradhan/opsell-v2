@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Nav } from "./home/nav";
 import { Footer } from "./home/footer";
+import { CtaSection } from "./home/cta";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-display",
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col antialiased bg-white text-n-900 font-body">
         <Nav />
         <main className="flex-1">{children}</main>
+        <CtaSection/>
         <Footer />
       </body>
     </html>

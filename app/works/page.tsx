@@ -4,7 +4,9 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight, Plug, Brain, Tag, TrendingUp } from "lucide-react";
 import { StepMockup } from "./stepMockup";
+import PlatformMarquee from "./platformMarquee";
 
+/* ---------------------- STEPS DATA ---------------------- */
 const STEPS = [
   {
     n: "01",
@@ -56,7 +58,7 @@ const STEPS = [
   },
 ];
 
-/* ── CountUp ── */
+/* ---------------------- COUNT UP ---------------------- */
 const CountUp = ({ to, suffix = "" }: { to: number; suffix?: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-20%" });
@@ -64,15 +66,17 @@ const CountUp = ({ to, suffix = "" }: { to: number; suffix?: string }) => {
 
   useEffect(() => {
     if (!inView) return;
+
     let raf = 0;
     const start = performance.now();
-    const dur = 1400;
+    const duration = 1400;
+
     const tick = (t: number) => {
-      const p = Math.min(1, (t - start) / dur);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(to * eased));
-      if (p < 1) raf = requestAnimationFrame(tick);
+      const progress = Math.min(1, (t - start) / duration);
+      setVal(Math.round(to * (1 - Math.pow(1 - progress, 3))));
+      if (progress < 1) raf = requestAnimationFrame(tick);
     };
+
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [inView, to]);
@@ -85,7 +89,7 @@ const CountUp = ({ to, suffix = "" }: { to: number; suffix?: string }) => {
   );
 };
 
-/* ── Step Row ── */
+/* ---------------------- STEP ROW ---------------------- */
 const StepRow = ({
   step,
   index,
@@ -96,88 +100,58 @@ const StepRow = ({
   const Icon = step.icon;
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: false, margin: "-10%" });
-  const isEven = index % 2 === 0;
+  const isLast = index === STEPS.length - 1;
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 48 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-      className={[
-        "grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center py-16",
-        index < STEPS.length - 1 ? "border-b border-border" : "",
-      ].join(" ")}
+      transition={{ duration: 0.6 }}
+      className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center py-16 ${!isLast ? "border-b border-n-200" : ""
+        }`}
     >
-      {/* TEXT BLOCK */}
-      <div
-        className={[
-          "flex flex-col gap-6",
-          !isEven ? "lg:order-2" : "",
-        ].join(" ")}
-      >
-        {/* Eyebrow */}
-        <div className="flex items-center gap-2.5">
-          <span className="font-mono text-[11px] font-medium text-primary bg-[var(--color-ai-surface)] px-2 py-0.5 rounded-md">
+      {/* LEFT TEXT */}
+      <div className="flex flex-col gap-5">
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[11px] text-brand bg-ai-bg px-2 py-0.5 rounded">
             {step.n}
           </span>
-          <Icon size={13} className="text-[var(--color-neutral-400)]" />
-          <span className="text-caption text-[var(--color-neutral-400)]">
+          <Icon size={12} className="text-n-400" />
+          <span className="text-[12px] text-n-400 tracking-wide">
             {step.eyebrow}
           </span>
         </div>
 
-        {/* Title */}
-        <h3 className="text-h1 font-display text-[28px] lg:text-[32px] font-bold text-foreground leading-[1.2] tracking-[-0.01em]">
+        <h3 className="text-[28px] font-semibold text-n-900">
           {step.title}
         </h3>
 
-        {/* Divider */}
-        <div className="w-12 h-1 bg-primary rounded-full" />
+        <div className="w-10 h-[3px] bg-brand rounded-full" />
 
-        {/* Body */}
-        <p className="font-sans text-[15px] text-[var(--color-neutral-600)] leading-[1.65]">
+        <p className="text-[15px] text-n-600 max-w-[440px]">
           {step.body}
         </p>
 
-        {/* Bullets */}
-        <ul className="flex flex-col gap-2.5">
+        <ul className="flex flex-col gap-2">
           {step.bullets.map((b) => (
-            <li
-              key={b}
-              className="flex items-center gap-3 font-sans text-[14px] text-[var(--color-neutral-700)]"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+            <li key={b} className="flex items-center gap-3 text-[14px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand" />
               {b}
             </li>
           ))}
         </ul>
 
-        {/* CTA */}
-        <button className="self-start mt-2 flex items-center gap-2 font-display text-[13px] font-bold text-primary hover:gap-3 transition-all duration-200 focus-ring group">
-          Try this step
-          <ArrowRight
-            size={14}
-            className="group-hover:translate-x-0.5 transition-transform duration-200"
-          />
+        <button className="self-start mt-2 inline-flex items-center gap-2 text-brand font-bold">
+          Try this step <ArrowRight size={14} />
         </button>
       </div>
 
-      {/* MOCKUP BLOCK */}
-      <div
-        className={[
-          "relative",
-          !isEven ? "lg:order-1" : "",
-        ].join(" ")}
-      >
-        {/* Glow backdrop */}
-        <div className="absolute -inset-4 bg-[var(--color-ai-surface)] rounded-3xl opacity-60 blur-2xl pointer-events-none" />
-
+      {/* RIGHT MOCKUP */}
+      <div className="relative">
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.55, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="relative"
         >
           <StepMockup step={index} inView={inView} />
         </motion.div>
@@ -186,52 +160,67 @@ const StepRow = ({
   );
 };
 
-/* ── PAGE ── */
+/* ---------------------- PAGE ---------------------- */
 export default function HowItWorksPage() {
   return (
-    <section className="bg-background py-20 px-6 lg:px-20">
-      {/* Section header */}
-      <div className="mb-16 flex flex-col gap-4 max-w-2xl">
-        <span className="inline-flex items-center gap-2 text-caption text-primary bg-[var(--color-ai-surface)] px-3 py-1.5 rounded-lg self-start border border-[var(--color-ai-border)]">
-          How it works
-        </span>
-        <h2 className="font-display text-[40px] lg:text-[48px] font-bold text-foreground leading-[1.1] tracking-[-0.02em]">
-          From chaos to clarity
-          <br />
-          <span className="text-primary">in four steps.</span>
-        </h2>
-        <p className="font-sans text-[15px] text-[var(--color-neutral-500)] leading-relaxed">
-          No complicated setup. No data science degree required. Just connect,
-          analyze, act, and grow.
-        </p>
-      </div>
+    <main className="bg-white min-h-screen pb-28">
 
-      {/* Steps */}
-      <div>
+      {/* HERO */}
+      {/* HERO */}
+      {/* HERO */}
+      <section className="px-4 lg:p-10 mt-5 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pt-24">
+        <div className="mx-auto max-w-3xl text-center">
+
+          {/* Eyebrow pill */}
+          <div className="inline-flex items-center gap-2 rounded-md border border-ai-border bg-ai-bg px-3 py-1.5 font-display text-ds-caption font-bold uppercase tracking-[0.12em] text-brand">
+            <Plug className="h-3.5 w-3.5 shrink-0" />
+            How it works
+          </div>
+
+          {/* Headline */}
+          <h1 className="mt-6 font-display text-4xl font-extrabold leading-[1.08] tracking-[-0.02em] text-n-900 sm:text-5xl lg:text-6xl">
+            From chaos to clarity{" "}
+            <span className="text-brand">in four steps.</span>
+          </h1>
+
+          {/* Brand divider */}
+          <div className="mx-auto my-6 h-1 w-10 rounded-sm bg-brand" />
+
+          {/* Subheading */}
+          <p className="font-body text-ds-body leading-relaxed text-n-500 sm:text-lg">
+            Connect your store, let AI do the analysis, act on smart suggestions,
+            and watch revenue grow — automatically.
+          </p>
+
+          {/* Step breadcrumb */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-2 font-display text-ds-caption font-semibold text-n-400">
+            {["Connect", "Analyze", "Act", "Grow"].map((label, i) => (
+              <span key={label} className="flex items-center gap-2">
+                <span className="rounded-md bg-brand-light px-2.5 py-1 text-brand">
+                  {label}
+                </span>
+                {i < 3 && <ArrowRight className="h-3 w-3 text-n-300" />}
+              </span>
+            ))}
+          </div>
+
+        </div>
+        
+      </section>
+
+      {/* MARQUEE */}
+      <PlatformMarquee  />
+
+      {/* STEPS */}
+      <section className="px-6 max-w-6xl mx-auto">
         {STEPS.map((s, i) => (
           <StepRow key={s.n} step={s} index={i} />
         ))}
-      </div>
+      </section>
 
-      {/* Social proof strip */}
-      <div className="mt-20 flex flex-col items-center gap-3 text-center">
-        <div className="font-display text-[48px] lg:text-[64px] font-extrabold text-foreground tracking-[-0.03em] leading-none">
-          +<CountUp to={32} suffix="%" />
-        </div>
-        <p className="font-sans text-[15px] text-[var(--color-neutral-400)]">
-          average sales lift across Opsell stores in the first 90 days
-        </p>
-        <button className="mt-4 inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white font-display text-[14px] font-bold px-6 py-3 rounded-xl transition-colors duration-200 focus-ring">
-          Start free — no credit card
-          <ArrowRight size={14} />
-        </button>
-      </div>
-    </section>
+      {/* CTA */}
+
+    </main>
   );
-}                    
+}
 
-
-
-
-
-  

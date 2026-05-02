@@ -1,19 +1,28 @@
-
 "use client";
 
 import { useState } from "react";
-import { Check, Clock, Bell, TrendingUp, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+  Check,
+  Clock,
+  Bell,
+  TrendingUp,
+  Sparkles,
+  ArrowRight,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const plans = [
+// ─── Config ──────────────────────────────────────────────────────────────────
+
+type Plan = {
+  name: string;
+  description: string;
+  monthly: number;
+  features: string[];
+  cta: string;
+  popular: boolean;
+};
+
+const plans: Plan[] = [
   {
     name: "Starter",
     description: "Best for new or small stores",
@@ -25,7 +34,7 @@ const plans = [
       "Basic sales insights",
       "Email support",
     ],
-    cta: "Start Free Trial",
+    cta: "Start free trial",
     popular: false,
   },
   {
@@ -40,7 +49,7 @@ const plans = [
       "Weekly growth reports",
       "Priority support",
     ],
-    cta: "Grow My Store",
+    cta: "Grow my store",
     popular: true,
   },
   {
@@ -55,219 +64,298 @@ const plans = [
       "Team access",
       "Detailed reports",
     ],
-    cta: "Book a Demo",
+    cta: "Book a demo",
     popular: false,
   },
 ];
 
-const faqs = [
+type Benefit = {
+  icon: React.ElementType;
+  title: string;
+  desc: string;
+};
+
+const benefits: Benefit[] = [
   {
-    q: "Do I need technical knowledge?",
-    a: "Not at all. Opsell is built for store owners, not developers. If you can use email, you can use Opsell.",
+    icon: Clock,
+    title: "Save hours every week",
+    desc: "Stop manually checking prices and updating listings across stores.",
   },
   {
-    q: "Can I cancel anytime?",
-    a: "Yes. There are no contracts and no cancellation fees. Cancel from your dashboard with one click.",
+    icon: Bell,
+    title: "Never miss a competitor move",
+    desc: "Get notified the moment a competitor changes price or stock.",
   },
   {
-    q: "How long does setup take?",
-    a: "Most stores are fully connected and running in under 10 minutes. We guide you through every step.",
-  },
-  {
-    q: "Will this work for my Shopify or WooCommerce store?",
-    a: "Yes. Opsell works seamlessly with Shopify, WooCommerce, and most popular ecommerce platforms.",
-  },
-  {
-    q: "Which plan is best for me?",
-    a: "If you have under 25 products, start with Starter. Growing stores love Growth. Larger catalogs should pick Scale.",
+    icon: TrendingUp,
+    title: "Sell more, automatically",
+    desc: "Smart pricing rules that nudge revenue up while you focus on growth.",
   },
 ];
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+const formatPrice = (monthly: number, yearly: boolean) => {
+  const price = yearly ? Math.round(monthly * 0.8) : monthly;
+  return `₹${price.toLocaleString("en-IN")}`;
+};
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+const BillingToggle = ({
+  yearly,
+  onToggle,
+}: {
+  yearly: boolean;
+  onToggle: () => void;
+}) => (
+  <div className="mt-10 inline-flex items-center gap-3 rounded-xl border border-n-border bg-white px-4 py-2 shadow-elev-1 animate-fade-up [animation-delay:240ms]">
+    <button
+      onClick={() => yearly && onToggle()}
+      className={cn(
+        "rounded-lg px-4 py-2 font-display text-ds-body-sm font-semibold transition-colors",
+        !yearly ? "bg-n-900 text-white" : "text-n-500 hover:text-n-700"
+      )}
+    >
+      Monthly
+    </button>
+    <button
+      onClick={() => !yearly && onToggle()}
+      className={cn(
+        "rounded-lg px-4 py-2 font-display text-ds-body-sm font-semibold transition-colors",
+        yearly ? "bg-n-900 text-white" : "text-n-500 hover:text-n-700"
+      )}
+    >
+      Yearly
+    </button>
+    <span className="rounded-md bg-success-light px-2.5 py-1 font-display text-ds-caption font-bold uppercase tracking-[0.1em] text-success">
+      Save 20%
+    </span>
+  </div>
+);
+
+const PlanCard = ({ plan, yearly }: { plan: Plan; yearly: boolean }) => (
+  <article
+    className={cn(
+      "group relative flex flex-col rounded-xl p-8 transition-all duration-300",
+      plan.popular
+        ? "bg-n-900 shadow-elev-3 md:-translate-y-4"
+        : "border border-n-border bg-white shadow-elev-1 hover:shadow-elev-3 hover:-translate-y-1"
+    )}
+  >
+    {/* Popular badge */}
+    {plan.popular && (
+      <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+        <div className="relative overflow-hidden rounded-md bg-brand px-4 py-1.5 font-display text-ds-caption font-bold uppercase tracking-[0.12em] text-white shadow-elev-2">
+          <span className="relative z-10">Most popular</span>
+          <span className="pointer-events-none absolute top-0 h-full w-1/3 -skew-x-12 bg-white/20 animate-pill-beam" />
+        </div>
+      </div>
+    )}
+
+    {/* Header */}
+    <header className="flex flex-col gap-1.5">
+      <h3
+        className={cn(
+          "font-display text-ds-h2 font-semibold",
+          plan.popular ? "text-white" : "text-n-900"
+        )}
+      >
+        {plan.name}
+      </h3>
+      <p
+        className={cn(
+          "font-body text-ds-body-sm",
+          plan.popular ? "text-n-300" : "text-n-500"
+        )}
+      >
+        {plan.description}
+      </p>
+    </header>
+
+    {/* Price */}
+    <div className="mt-8 flex items-end gap-1">
+      <span
+        className={cn(
+          "font-display text-5xl font-extrabold tracking-tight",
+          plan.popular ? "text-white" : "text-n-900"
+        )}
+      >
+        {formatPrice(plan.monthly, yearly)}
+      </span>
+      <span
+        className={cn(
+          "mb-2 font-body text-ds-body-sm",
+          plan.popular ? "text-n-400" : "text-n-500"
+        )}
+      >
+        /month
+      </span>
+    </div>
+    <p
+      className={cn(
+        "mt-1 font-body text-ds-caption",
+        plan.popular ? "text-n-400" : "text-n-400"
+      )}
+    >
+      {yearly ? "Billed yearly" : "Billed monthly"}
+    </p>
+
+    {/* CTA */}
+    <button
+      className={cn(
+        "mt-8 flex h-12 w-full items-center justify-center gap-2 rounded-lg font-display text-ds-body font-semibold transition-colors group/btn",
+        plan.popular
+          ? "bg-brand text-white hover:bg-brand-dark shadow-elev-2"
+          : "bg-n-900 text-white hover:bg-n-800"
+      )}
+    >
+      {plan.cta}
+      <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+    </button>
+
+    {/* Features */}
+    <ul className="mt-8 flex flex-col gap-3.5">
+      {plan.features.map((feature) => (
+        <li key={feature} className="flex items-start gap-3">
+          <span
+            className={cn(
+              "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md",
+              plan.popular ? "bg-brand-mid/30 text-brand-mid" : "bg-brand-light text-brand"
+            )}
+          >
+            <Check className="h-3 w-3" strokeWidth={3} />
+          </span>
+          <span
+            className={cn(
+              "font-body text-ds-body-sm",
+              plan.popular ? "text-n-200" : "text-n-700"
+            )}
+          >
+            {feature}
+          </span>
+        </li>
+      ))}
+    </ul>
+  </article>
+);
+const BenefitCard = ({ icon: Icon, title, desc }: Benefit) => (
+  <div className="group relative overflow-hidden rounded-xl bg-n-900 p-7 shadow-elev-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-elev-3">
+    {/* Brand glow blobs — same treatment as CTA strip */}
+    <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-brand/20 blur-2xl" />
+    <div className="pointer-events-none absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-brand-mid/20 blur-2xl" />
+
+    {/* Icon */}
+    <div className="relative flex h-11 w-11 items-center justify-center rounded-lg bg-brand/20 text-brand-mid transition-colors duration-300 group-hover:bg-brand group-hover:text-white">
+      <Icon className="h-5 w-5" />
+    </div>
+
+    {/* Text */}
+    <h3 className="relative mt-5 font-display text-ds-h3 font-semibold text-white">
+      {title}
+    </h3>
+    <p className="relative mt-2 font-body text-ds-body-sm text-n-400">
+      {desc}
+    </p>
+  </div>
+);
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function PricingPage() {
   const [yearly, setYearly] = useState(false);
 
-  const formatPrice = (monthly: number) => {
-    const price = yearly ? Math.round(monthly * 0.8) : monthly;
-    return `₹${price.toLocaleString("en-IN")}`;
-  };
-
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
-      {/* Hero */}
-      <section className="bg-gradient-to-b from-blue-50 via-white to-slate-50">
-        <div className=" max-w-7xl px-6 pb-20 pt-24 text-center lg:px-8">
-          <Badge className="mb-6 border-0 bg-blue-50 px-4 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-100">
-            <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-            Simple pricing for growing stores
-          </Badge>
+    <main className="min-h-screen overflow-x-hidden bg-n-50">
 
-          <h1 className="mx-auto mb-6 max-w-4xl text-5xl font-bold tracking-tight md:text-6xl lg:text-7xl">
-            Pricing that grows
-            <br />
-            <span className="text-blue-600">with your store.</span>
+      {/* ── Hero ── */}
+      <section className="px-4 pb-16 pt-20 text-center sm:px-6 sm:pt-24 lg:px-8">
+        {/* Glow blobs */}
+        <div className="pointer-events-none absolute left-1/2 top-0 h-80 w-[600px] -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
+
+        <div className="relative mx-auto max-w-3xl">
+          {/* Eyebrow */}
+          <div className="inline-flex items-center gap-2 rounded-md border border-ai-border bg-ai-bg px-3 py-1.5 font-display text-ds-caption font-bold uppercase tracking-[0.12em] text-brand animate-fade-up">
+            <Sparkles className="h-3.5 w-3.5" />
+            Simple pricing for growing stores
+          </div>
+
+          {/* Headline */}
+          <h1 className="mt-6 font-display text-4xl font-extrabold tracking-[-0.02em] text-n-900 animate-fade-up sm:text-5xl lg:text-6xl [animation-delay:80ms]">
+            Pricing that grows{" "}
+            <span className="text-brand">with your store.</span>
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl text-lg text-slate-600 md:text-xl">
+          {/* Subheading */}
+          <p className="mx-auto mt-5 max-w-xl font-body text-ds-body leading-relaxed text-n-500 animate-fade-up [animation-delay:160ms]">
             Save hours every week. Sell more without lifting a finger. Pick a
-            plan and start your free trial today.
+            plan and start your free trial — no card needed.
           </p>
 
-          <div className="inline-flex items-center gap-4 rounded-full border border-slate-200 bg-white px-6 py-3 shadow-sm">
-            <span
-              className={`text-sm font-medium transition-colors ${
-                !yearly ? "text-slate-900" : "text-slate-500"
-              }`}
-            >
-              Monthly
-            </span>
-
-            <Switch checked={yearly} onCheckedChange={setYearly} />
-
-            <span
-              className={`text-sm font-medium transition-colors ${
-                yearly ? "text-slate-900" : "text-slate-500"
-              }`}
-            >
-              Yearly
-            </span>
-
-            <Badge className="ml-1 border-0 bg-blue-50 text-blue-600 hover:bg-blue-100">
-              Save 20%
-            </Badge>
+          {/* Toggle */}
+          <div className="flex justify-center">
+            <BillingToggle yearly={yearly} onToggle={() => setYearly((y) => !y)} />
           </div>
         </div>
       </section>
 
-      {/* Pricing Cards */}
-      <section className="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
-        <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
+      {/* ── Plans ── */}
+      <section className="px-4 pb-24 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
           {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative rounded-3xl p-8 transition-all duration-300 ${
-                plan.popular
-                  ? "border-2 border-blue-600 bg-white shadow-2xl shadow-blue-100 md:-translate-y-4"
-                  : "border border-slate-200 bg-white shadow-sm hover:-translate-y-1 hover:shadow-lg"
-              }`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-blue-600 px-4 py-1.5 text-xs font-semibold text-white shadow-lg hover:bg-blue-600">
-                    Most Popular
-                  </Badge>
-                </div>
-              )}
-
-              <div className="mb-8">
-                <h3 className="mb-2 text-2xl font-bold text-slate-900">
-                  {plan.name}
-                </h3>
-                <p className="text-sm text-slate-600">{plan.description}</p>
-              </div>
-
-              <div className="mb-8">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-5xl font-bold tracking-tight text-slate-900">
-                    {formatPrice(plan.monthly)}
-                  </span>
-                  <span className="text-base text-slate-500">/month</span>
-                </div>
-
-                {yearly && (
-                  <p className="mt-2 text-xs font-medium text-blue-600">
-                    Billed yearly
-                  </p>
-                )}
-              </div>
-
-              <Button
-                className={`mb-8 h-12 w-full rounded-xl font-medium transition-all ${
-                  plan.popular
-                    ? "bg-blue-600 text-white hover:bg-blue-700"
-                    : "bg-slate-100 text-slate-900 hover:bg-blue-50 hover:text-blue-600"
-                }`}
-              >
-                {plan.cta}
-              </Button>
-
-              <ul className="space-y-4">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3">
-                    <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-50">
-                      <Check className="h-3 w-3 text-blue-600" strokeWidth={3} />
-                    </div>
-                    <span className="text-sm text-slate-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <PlanCard key={plan.name} plan={plan} yearly={yearly} />
           ))}
         </div>
 
-        {/* Benefits */}
-        <div className="mt-24 grid max-w-5xl gap-8 border-t border-slate-200 pt-16 md:mx-auto md:grid-cols-3">
-          {[
-            {
-              icon: Clock,
-              title: "Save hours every week",
-              desc: "Stop manually checking prices and updating listings.",
-            },
-            {
-              icon: Bell,
-              title: "Never miss competitor changes",
-              desc: "Get notified the moment your competitors move.",
-            },
-            {
-              icon: TrendingUp,
-              title: "Increase sales automatically",
-              desc: "Smart pricing that helps you sell more, every day.",
-            },
-          ].map((item) => (
-            <div key={item.title} className="text-center">
-              <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50">
-                <item.icon className="h-6 w-6 text-blue-600" />
-              </div>
-              <h4 className="mb-2 text-lg font-semibold text-slate-900">
-                {item.title}
-              </h4>
-              <p className="text-sm text-slate-600">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="bg-slate-100/70 py-24">
-        <div className="mx-auto max-w-3xl px-6">
+        {/* ── Benefits ── */}
+        <div className="mx-auto mt-24 max-w-6xl">
           <div className="mb-12 text-center">
-            <h2 className="mb-4 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-              Frequently asked questions
-            </h2>
-            <p className="text-lg text-slate-600">
-              Everything you need to know before getting started.
+            <p className="font-display mb-3 text-ds-caption font-bold uppercase tracking-[0.12em] text-brand">
+              Why teams switch
             </p>
+            <div className="mx-auto mb-5 h-1 w-10 rounded-sm bg-brand" />
+            <h2 className="font-display text-ds-h1 font-bold tracking-[-0.01em] text-n-900 sm:text-4xl">
+              Built to give your team back its time.
+            </h2>
           </div>
 
-          <Accordion type="single" collapsible className="space-y-3">
-            {faqs.map((faq, i) => (
-              <AccordionItem
-                key={i}
-                value={`item-${i}`}
-                className="rounded-2xl border border-slate-200 bg-white px-6 shadow-sm"
-              >
-                <AccordionTrigger className="py-5 text-left font-semibold text-slate-900 hover:no-underline">
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent className="pb-5 text-slate-600">
-                  {faq.a}
-                </AccordionContent>
-              </AccordionItem>
+          <div className="grid gap-6 md:grid-cols-3">
+            {benefits.map((item) => (
+              <BenefitCard key={item.title} {...item} />
             ))}
-          </Accordion>
+          </div>
+        </div>
+
+        {/* ── CTA strip ── */}
+        <div className="mx-auto mt-24 max-w-6xl">
+          <div className="relative overflow-hidden rounded-xl bg-n-900 p-10 shadow-elev-3 md:p-14">
+            {/* Subtle brand glow inside strip */}
+            <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-brand/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-brand-mid/20 blur-3xl" />
+
+            <div className="relative flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+              <div className="max-w-xl">
+                <h3 className="font-display text-ds-h1 font-bold text-white sm:text-3xl">
+                  Try Opsell free for 14 days.
+                </h3>
+                <p className="mt-3 font-body text-ds-body text-n-300">
+                  No credit card. Cancel anytime. Set up in under 5 minutes.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <button className="flex h-12 items-center gap-2 rounded-lg bg-white px-6 font-display text-ds-body font-semibold text-n-900 shadow-elev-2 transition-colors hover:bg-n-100">
+                  Start free trial
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+                <button className="flex h-12 items-center gap-2 rounded-lg border border-n-700 px-6 font-display text-ds-body font-semibold text-white transition-colors hover:border-n-500 hover:bg-n-800">
+                  Talk to sales
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-
-      
     </main>
   );
 }

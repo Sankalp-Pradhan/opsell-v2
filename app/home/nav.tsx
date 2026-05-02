@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const LINKS = [
-  { label: "product",      href: "/product" },
   { label: "How it works", href: "/works" },
   { label: "Features",      href: "/features" },
   { label: "Pricing",         href: "/pricing" },
@@ -110,7 +109,7 @@ export function Nav() {
 
         {/* Desktop CTA */}
         <div className="nav-cta" style={{ gap: 12, alignItems: "center" }}>
-          <Link href="/contact">
+          <Link href="https://opsell.neetocal.com/meeting-with-shaurya-gupta">
             <button
               style={ctaStyle}
               onMouseEnter={(e) => (e.currentTarget.style.background = "#3B32C4")}

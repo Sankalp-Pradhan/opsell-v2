@@ -8,6 +8,7 @@ const Index = () => {
       <Hero />
       <FeatureBlocks />
       <Benefits />
+      
     </main>
   );
 };
