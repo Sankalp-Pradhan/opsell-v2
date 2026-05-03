@@ -193,7 +193,7 @@ export default function HowItWorksPage() {
           </p>
 
           {/* Step breadcrumb */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-2 font-display text-ds-caption font-semibold text-n-400">
+          <div className="mt-8 flex flex-wrap mb-10 items-center justify-center gap-2 font-display text-ds-caption font-semibold text-n-400">
             {["Connect", "Analyze", "Act", "Grow"].map((label, i) => (
               <span key={label} className="flex items-center gap-2">
                 <span className="rounded-md bg-brand-light px-2.5 py-1 text-brand">

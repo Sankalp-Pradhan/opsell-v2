@@ -7,6 +7,33 @@
 /* ==========================================
    CSS VARIABLES - LIGHT THEME
    ========================================== */
+
+.nav-links {
+  display: flex;
+}
+
+.nav-cta {
+  display: flex;
+}
+
+.hamburger {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-cta {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #0F1114;
@@ -61,6 +88,7 @@
 @layer base {
   * {
     border-color: var(--border);
+
   }
 
   html {
@@ -84,20 +112,43 @@
     color: var(--color-indigo-100);
   }
 
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: var(--surface-muted); border-radius: 4px; }
-  ::-webkit-scrollbar-thumb { background: #B0B4BC; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: #8C919A; }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--surface-muted);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #B0B4BC;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8C919A;
+  }
 }
 
 /* ==========================================
    COMPONENT CLASSES
    ========================================== */
 @layer components {
-  .focus-ring { outline: none; }
-  .focus-ring:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .focus-ring {
+    outline: none;
+  }
 
-  .ai-thinking { color: var(--color-ai-thinking); animation: aiPulse 2s ease-in-out infinite; }
+  .focus-ring:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  .ai-thinking {
+    color: var(--color-ai-thinking);
+    animation: aiPulse 2s ease-in-out infinite;
+  }
 
   .ai-surface {
     background-color: var(--color-ai-surface);
@@ -105,17 +156,36 @@
     border-radius: 12px;
   }
 
-  .ai-confidence-high { color: var(--color-ai-confidence-high); }
-  .ai-confidence-mid  { color: var(--color-ai-confidence-mid);  }
-  .ai-confidence-low  { color: var(--color-ai-confidence-low);  }
+  .ai-confidence-high {
+    color: var(--color-ai-confidence-high);
+  }
 
-  .surface-muted    { background-color: var(--surface-muted); }
-  .surface-ai       { background-color: var(--surface-ai); }
+  .ai-confidence-mid {
+    color: var(--color-ai-confidence-mid);
+  }
+
+  .ai-confidence-low {
+    color: var(--color-ai-confidence-low);
+  }
+
+  .surface-muted {
+    background-color: var(--surface-muted);
+  }
+
+  .surface-ai {
+    background-color: var(--surface-ai);
+  }
+
   .surface-elevated {
     background-color: var(--surface-elevated);
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
 
-  .border-subtle { border-color: var(--border-subtle); }
-  .border-strong { border-color: var(--border-strong); }
+  .border-subtle {
+    border-color: var(--border-subtle);
+  }
+
+  .border-strong {
+    border-color: var(--border-strong);
+  }
 }
