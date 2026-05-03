@@ -1,48 +1,24 @@
 "use client";
 
-// ─── Nav ──────────────────────────────────────────────────────────────────────
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const LINKS = [
   { label: "How it works", href: "/works" },
-  { label: "Features",      href: "/features" },
-  { label: "Pricing",         href: "/pricing" },
+  { label: "Features", href: "/features" },
+  { label: "Pricing", href: "/pricing" },
 ];
 
-const NAV_STYLES = `
-  .nav-links { display: flex; }
-  .nav-cta   { display: flex; }
-  .hamburger { display: none; }
-
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .nav-cta   { display: none; }
-    .hamburger { display: flex; }
-  }
-`;
-
 export function Nav() {
-  const [scrolled,     setScrolled]     = useState(false);
-  const [sidebarOpen,  setSidebarOpen]  = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Inject responsive CSS once
-  useEffect(() => {
-    const el = document.createElement("style");
-    el.textContent = NAV_STYLES;
-    document.head.appendChild(el);
-    return () => { document.head.removeChild(el); };
-  }, []);
-
-  // Scroll detection
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", h, { passive: true });
     return () => window.removeEventListener("scroll", h);
   }, []);
 
-  // Body scroll lock when sidebar open
   useEffect(() => {
     document.body.style.overflow = sidebarOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -91,7 +67,7 @@ export function Nav() {
           <span style={{ fontFamily: "var(--font-display)", fontSize: 20, fontWeight: 800, color: "#5046E5" }}>.</span>
         </Link>
 
-        {/* Desktop Links */}
+        {/* Desktop Links — hidden on mobile via globals.css */}
         <ul className="nav-links" style={{ gap: 32, listStyle: "none", margin: 0, padding: 0 }}>
           {LINKS.map(({ label, href }) => (
             <li key={label}>
@@ -107,7 +83,7 @@ export function Nav() {
           ))}
         </ul>
 
-        {/* Desktop CTA */}
+        {/* Desktop CTA — hidden on mobile via globals.css */}
         <div className="nav-cta" style={{ gap: 12, alignItems: "center" }}>
           <Link href="https://opsell.neetocal.com/meeting-with-shaurya-gupta">
             <button
@@ -115,12 +91,12 @@ export function Nav() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "#3B32C4")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#5046E5")}
             >
-              Talk to the founder
+              Request demo
             </button>
           </Link>
         </div>
 
-        {/* Hamburger */}
+        {/* Hamburger — visible on mobile via globals.css */}
         <button
           className="hamburger"
           onClick={() => setSidebarOpen(true)}
@@ -128,6 +104,7 @@ export function Nav() {
           style={{
             background: "none", border: "none", cursor: "pointer",
             padding: 8, borderRadius: 8,
+            display: "flex",
             flexDirection: "column", gap: 5,
             alignItems: "center", justifyContent: "center",
           }}
@@ -215,13 +192,13 @@ export function Nav() {
 
         {/* Sidebar CTA */}
         <div style={{ padding: "0 24px" }}>
-          <Link href="/contact" onClick={close} style={{ display: "block" }}>
+          <Link href="https://opsell.neetocal.com/meeting-with-shaurya-gupta" onClick={close} style={{ display: "block" }}>
             <button
               style={{ ...ctaStyle, width: "100%", padding: "12px 20px" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "#3B32C4")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#5046E5")}
             >
-              Talk to the founder
+              Request demo
             </button>
           </Link>
         </div>
