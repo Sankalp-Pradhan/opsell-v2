@@ -9,9 +9,23 @@ const LINKS = [
   { label: "Pricing", href: "/pricing" },
 ];
 
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpoint);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+
+  return isMobile;
+}
+
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 8);
@@ -23,6 +37,11 @@ export function Nav() {
     document.body.style.overflow = sidebarOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [sidebarOpen]);
+
+  // Close sidebar when switching to desktop
+  useEffect(() => {
+    if (!isMobile) setSidebarOpen(false);
+  }, [isMobile]);
 
   const close = () => setSidebarOpen(false);
 
@@ -67,52 +86,57 @@ export function Nav() {
           <span style={{ fontFamily: "var(--font-display)", fontSize: 20, fontWeight: 800, color: "#5046E5" }}>.</span>
         </Link>
 
-        {/* Desktop Links — hidden on mobile via globals.css */}
-        <ul className="nav-links" style={{ gap: 32, listStyle: "none", margin: 0, padding: 0 }}>
-          {LINKS.map(({ label, href }) => (
-            <li key={label}>
-              <Link
-                href={href}
-                style={linkStyle}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#0F1114")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#4A4F57")}
+        {/* Desktop Links — hidden on mobile */}
+        {!isMobile && (
+          <ul style={{ display: "flex", gap: 32, listStyle: "none", margin: 0, padding: 0 }}>
+            {LINKS.map(({ label, href }) => (
+              <li key={label}>
+                <Link
+                  href={href}
+                  style={linkStyle}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#0F1114")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#4A4F57")}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Desktop CTA — hidden on mobile */}
+        {!isMobile && (
+          <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            <Link href="https://opsell.neetocal.com/meeting-with-shaurya-gupta">
+              <button
+                style={ctaStyle}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#3B32C4")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#5046E5")}
               >
-                {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+                Request demo
+              </button>
+            </Link>
+          </div>
+        )}
 
-        {/* Desktop CTA — hidden on mobile via globals.css */}
-        <div className="nav-cta" style={{ gap: 12, alignItems: "center" }}>
-          <Link href="https://opsell.neetocal.com/meeting-with-shaurya-gupta">
-            <button
-              style={ctaStyle}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "#3B32C4")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "#5046E5")}
-            >
-              Request demo
-            </button>
-          </Link>
-        </div>
-
-        {/* Hamburger — visible on mobile via globals.css */}
-        <button
-          className="hamburger"
-          onClick={() => setSidebarOpen(true)}
-          aria-label="Open menu"
-          style={{
-            background: "none", border: "none", cursor: "pointer",
-            padding: 8, borderRadius: 8,
-            display: "flex",
-            flexDirection: "column", gap: 5,
-            alignItems: "center", justifyContent: "center",
-          }}
-        >
-          {[0, 1, 2].map((i) => (
-            <span key={i} style={{ display: "block", width: 22, height: 2, background: "#0F1114", borderRadius: 2 }} />
-          ))}
-        </button>
+        {/* Hamburger — visible on mobile only */}
+        {isMobile && (
+          <button
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Open menu"
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              padding: 8, borderRadius: 8,
+              display: "flex",
+              flexDirection: "column", gap: 5,
+              alignItems: "center", justifyContent: "center",
+            }}
+          >
+            {[0, 1, 2].map((i) => (
+              <span key={i} style={{ display: "block", width: 22, height: 2, background: "#0F1114", borderRadius: 2 }} />
+            ))}
+          </button>
+        )}
       </nav>
 
       {/* ── Backdrop ── */}
