@@ -104,7 +104,6 @@ export function Nav() {
           style={{
             background: "none", border: "none", cursor: "pointer",
             padding: 8, borderRadius: 8,
-            display: "flex",
             flexDirection: "column", gap: 5,
             alignItems: "center", justifyContent: "center",
           }}
